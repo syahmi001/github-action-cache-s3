@@ -34,8 +34,8 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Install Deps
         run: yarn install --pure-lockfile
-      # - name: Build & Test
-      #   run: yarn test
+      - name: Build & Test
+        run: yarn build
       - name: Ensure dist/ folder is up-to-date
         run: |
           yarn build
@@ -44,6 +44,18 @@ jobs:
             git diff
             exit 1
           fi
+      - name: "archive lib when diff 1"
+        uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+          name: restore
+          path: dist/restore/index.js
+      - name: "archive lib when diff 2"
+        uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+          name: save
+          path: dist/save/index.js
 
   create-minio-bucket:
     runs-on: ubuntu-latest
