@@ -15,6 +15,7 @@ import {
   setCacheSizeOutput,
   saveMatchedKey,
   getInput,
+  downloadFile
 } from "./utils";
 
 process.on("uncaughtException", (e) => core.info("warning: " + e.message));
@@ -26,6 +27,7 @@ async function restoreCache() {
     const useFallback = getInputAsBoolean("use-fallback");
     const paths = getInputAsArray("path");
     const restoreKeys = getInputAsArray("restore-keys");
+    const cloudfrontUrl = getInputAsArray("cloudfront");
 
     try {
       // Inputs are re-evaluted before the post action, so we want to store the original values
@@ -53,10 +55,18 @@ async function restoreCache() {
       );
       core.debug("found cache object");
       saveMatchedKey(matchingKey);
+      const cachePathUrl = `${cloudfrontUrl}/${obj.name}`;
       core.info(
         `Downloading cache from s3 to ${archivePath}. bucket: ${bucket}, object: ${obj.name}`
       );
-      await mc.fGetObject(bucket, obj.name, archivePath);
+      await downloadFile(cachePathUrl, archivePath, (error: any) => {
+        if (error) {
+          console.error('Error occurred:', error);
+        } else {
+          console.log('File downloaded successfully.');
+        }
+      });
+      // await mc.fGetObject(bucket, obj.name, archivePath);
 
       if (core.isDebug()) {
         await listTar(archivePath, compressionMethod);

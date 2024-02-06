@@ -3,6 +3,8 @@ import * as utils from "@actions/cache/lib/internal/cacheUtils";
 import * as core from "@actions/core";
 import * as minio from "minio";
 import { State } from "./state";
+import https from 'https';
+import fs from 'fs';
 
 export function isGhes(): boolean {
   const ghUrl = new URL(
@@ -180,4 +182,23 @@ export function isExactKeyMatch(): boolean {
     `isExactKeyMatch: matchedKey=${matchedKey} inputKey=${inputKey}, result=${result}`
   );
   return result;
+}
+
+export async function downloadFile(fileUrl: string, downloadPath: string, callback: any) {
+  const file = fs.createWriteStream(downloadPath);
+
+  https.get(fileUrl, function(response: any) {
+    response.pipe(file);
+    file.on('finish', function() {
+      file.close(() => {
+        console.log('File downloaded successfully.');
+        if (callback) callback(null);
+      });
+    });
+  }).on('error', function(err: any) {
+    fs.unlink(downloadPath, () => {
+      console.error('Error downloading file:', err);
+      if (callback) callback(err);
+    });
+  });
 }
