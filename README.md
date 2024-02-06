@@ -29,6 +29,7 @@ jobs:
           sessionToken: "YOUR_TOKEN_KEY" # optional
           bucket: actions-cache # required
           use-fallback: true # optional, use github actions cache fallback, default true
+          cloudfront: "Cloudfront URL" # required, to pull cache from cloudfront instead of s3
 
           # actions/cache compatible properties: https://github.com/actions/cache
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
