@@ -1,4 +1,4 @@
-# actions-s3-cache
+# github-action-cache-s3
 
 This action enables caching dependencies to s3 compatible storage, e.g. minio, AWS S3
 
@@ -7,7 +7,7 @@ It also has github [actions/cache@v2](https://github.com/actions/cache) fallback
 ## Usage
 
 ```yaml
-name: dev ci
+name: CI_DEV
 
 on:
   push:
@@ -20,13 +20,13 @@ jobs:
     runs-on: [ubuntu-latest]
 
     steps:
-      - uses: tespkg/actions-cache@v1
+      - uses: syahmi001/github-action-cache-s3@v1
         with:
           endpoint: play.min.io # optional, default s3.amazonaws.com
           insecure: false # optional, use http instead of https. default false
-          accessKey: "Q3AM3UQ867SPQQA43P2F" # required
-          secretKey: "zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG" # required
-          sessionToken: "AQoDYXdzEJraDcqRtz123" # optional
+          accessKey: "YOUR_ACCESS_KEY" # required
+          secretKey: "YOUR_SECRET_KEY" # required
+          sessionToken: "YOUR_TOKEN_KEY" # optional
           bucket: actions-cache # required
           use-fallback: true # optional, use github actions cache fallback, default true
 
@@ -42,10 +42,10 @@ jobs:
 You can also set env instead of using `with`:
 
 ```yaml
-      - uses: tespkg/actions-cache@v1
+      - uses: syahmi001/github-action-cache-s3@v1
         env:
-          AWS_ACCESS_KEY_ID: "Q3AM3UQ867SPQQA43P2F"
-          AWS_SECRET_ACCESS_KEY: "zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG"
+          AWS_ACCESS_KEY_ID: "YOUR_ACCESS_KEY"
+          AWS_SECRET_ACCESS_KEY: "YOUR_SECRET_KEY"
           # AWS_SESSION_TOKEN: "xxx"
           AWS_REGION: "us-east-1"
         with:
