@@ -34,15 +34,14 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Install Deps
         run: yarn install --pure-lockfile
-      # - name: Build & Test
-      #   run: yarn build
+      - name: Build & Test
+        run: yarn build
       - name: Ensure dist/ folder is up-to-date
         run: |
-          yarn build
-          if [ "$(git diff --ignore-space-at-eol | wc -l)" -gt "0" ]; then
-            echo "Detected uncommitted changes after build.  See status below:"
-            exit 1
-          fi
+          git diff --exit-code --stat -- . ':!node_modules' \
+          || (echo "##[error] found changed files after build. please 'npm run build'" \
+                    "and check in all changes" \
+              && exit 1)
       - name: "archive lib when diff 1"
         uses: actions/upload-artifact@v1
         if: failure()
