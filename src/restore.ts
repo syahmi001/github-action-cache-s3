@@ -61,7 +61,7 @@ async function restoreCache() {
       );
       await downloadFile(cachePathUrl, archivePath, (error: any) => {
         if (error) {
-          core.info('Error occurred:', error);
+          core.info('Error occurred:'+ error);
         } else {
           core.info('File downloaded successfully from ' + cachePathUrl);
         }
