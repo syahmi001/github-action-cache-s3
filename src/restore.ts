@@ -57,7 +57,7 @@ async function restoreCache() {
       saveMatchedKey(matchingKey);
       const cachePathUrl = `${cloudfrontUrl}/${obj.name}`;
       core.info(
-        `Downloading cache from cloudfront to ${archivePath}. URL: ${cachePathUrl}, object: ${obj.name}`
+        `Downloading cache from cloudfront to ${archivePath}. URL: ${cachePathUrl} , object: ${obj.name}`
       );
       await downloadFile(cachePathUrl, archivePath, (error: any) => {
         if (error) {

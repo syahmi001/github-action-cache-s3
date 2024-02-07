@@ -185,20 +185,23 @@ export function isExactKeyMatch(): boolean {
 }
 
 export async function downloadFile(fileUrl: string, downloadPath: string, callback: any) {
-  const file = fs.createWriteStream(downloadPath);
+  return new Promise<void>((resolve, reject) => {
+    const file = fs.createWriteStream(downloadPath);
 
-  https.get(fileUrl, function(response: any) {
-    response.pipe(file);
-    file.on('finish', function() {
-      file.close(() => {
-        console.log('File downloaded successfully.');
-        if (callback) callback(null);
+    https.get(fileUrl, function (response: any) {
+      response.pipe(file);
+      file.on('finish', function () {
+        file.close(() => {
+          console.log('File downloaded successfully.');
+          resolve();
+        });
       });
-    });
-  }).on('error', function(err: any) {
-    fs.unlink(downloadPath, () => {
-      console.error('Error downloading file:', err);
-      if (callback) callback(err);
+    }).on('error', function (err: any) {
+      fs.unlink(downloadPath, () => {
+        console.error('Error downloading file:', err);
+        if (callback) callback(err);
+        reject(err);
+      });
     });
   });
 }
