@@ -2,6 +2,11 @@
 
 This action enables caching dependencies to s3 compatible storage, e.g. minio, AWS S3
 
+The main change done for in this repo is you can use cloudfront URL to fetch you cache instead of directly downloading from your bucket.
+This will reduce the outbound cost from AWS by A LOT!
+
+Keep in mind you still need to add the AWS key access to allow this action to push new caches.
+
 It also has github [actions/cache@v2](https://github.com/actions/cache) fallback if s3 save & restore fails
 
 ## Usage
@@ -22,14 +27,14 @@ jobs:
     steps:
       - uses: syahmi001/github-action-cache-s3@v1
         with:
-          endpoint: play.min.io # optional, default s3.amazonaws.com
-          insecure: false # optional, use http instead of https. default false
+          cloudfront: "Cloudfront URL" # required, need HTTPS i.e. https://abc123.cloudfront.net
           accessKey: "YOUR_ACCESS_KEY" # required
           secretKey: "YOUR_SECRET_KEY" # required
-          sessionToken: "YOUR_TOKEN_KEY" # optional
           bucket: actions-cache # required
+          endpoint: play.min.io # optional, default s3.amazonaws.com
+          insecure: false # optional, use http instead of https. default false
+          sessionToken: "YOUR_TOKEN_KEY" # optional
           use-fallback: true # optional, use github actions cache fallback, default true
-          cloudfront: "Cloudfront URL" # required, to pull cache from cloudfront instead of s3
 
           # actions/cache compatible properties: https://github.com/actions/cache
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
@@ -50,6 +55,7 @@ You can also set env instead of using `with`:
           # AWS_SESSION_TOKEN: "xxx"
           AWS_REGION: "us-east-1"
         with:
+          cloudfront: https://abc123.cloudfront.net
           endpoint: play.min.io
           bucket: actions-cache
           use-fallback: false
