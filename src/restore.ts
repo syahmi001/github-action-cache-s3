@@ -61,9 +61,9 @@ async function restoreCache() {
       );
       await downloadFile(cachePathUrl, archivePath, (error: any) => {
         if (error) {
-          console.error('Error occurred:', error);
+          core.info('Error occurred:', error);
         } else {
-          console.log('File downloaded successfully.');
+          core.info('File downloaded successfully from ' + cachePathUrl);
         }
       });
       // await mc.fGetObject(bucket, obj.name, archivePath);
