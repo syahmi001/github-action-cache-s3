@@ -2,7 +2,7 @@
 
 This action enables caching dependencies to s3 compatible storage, e.g. minio, AWS S3
 
-The main change done for in this repo is you can use cloudfront URL to fetch you cache instead of directly downloading from your bucket.
+The main changes done in this repo is you can use CloudFront URL to fetch you caches instead of directly downloading from your bucket.
 This will reduce the outbound cost from AWS by A LOT!
 
 Keep in mind you still need to add the AWS key access to allow this action to push new caches.
@@ -25,7 +25,7 @@ jobs:
     runs-on: [ubuntu-latest]
 
     steps:
-      - uses: syahmi001/github-action-cache-s3@v1
+      - uses: syahmi001/github-action-cache-s3@v1.0
         with:
           cloudfront: "Cloudfront URL" # required, need HTTPS i.e. https://abc123.cloudfront.net
           accessKey: "YOUR_ACCESS_KEY" # required
@@ -48,7 +48,7 @@ jobs:
 You can also set env instead of using `with`:
 
 ```yaml
-      - uses: syahmi001/github-action-cache-s3@v1
+      - uses: syahmi001/github-action-cache-s3@v1.0
         env:
           AWS_ACCESS_KEY_ID: "YOUR_ACCESS_KEY"
           AWS_SECRET_ACCESS_KEY: "YOUR_SECRET_KEY"
