@@ -1,4 +1,4 @@
-name: "s3 cache"
+name: "s3 cloudfront cache"
 author: tespkg
 description: "S3 actions cache with actions/cache@v2 passthrough"
 inputs:
